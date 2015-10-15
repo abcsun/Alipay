@@ -1,13 +1,21 @@
 {
-    "name": "latrell/alipay",
+    "name": "abcsun/laravel-alipay",
     "description": "支付宝SDK在Laravel5封装包。",
     "keywords": ["L5", "Laravel 5", "Laravel", "Alipay", "Alipay SDK"],
     "license": "MIT",
     "authors": [
         {
             "name": "Latrell Chan",
-            "email": "i@latrell.me"
-        }
+            "email": "i@latrell.me",
+            "role": "Original Developer"
+	    },
+    	{
+    	      "name": "abcsun",
+    	      "email": "chenglongsun_nj@163.com",
+    	      "role": "Developer",
+    	      "homepage": "http://github.com/abcsun"
+    	}
+        
     ],
     "require": {
         "php": ">=5.4.0",
