@@ -50,6 +50,10 @@ class SdkPayment
 
 	private $qr_pay_mode;
 
+	private $paymethod = "bankPay";  //付款方式, 用于网银支付时为bankPay
+
+	private $defaultbank;  //银行简码，用于网银支付
+
 	public function __construct()
 	{
 		$this->cacert = getcwd() . '\\cacert.pem';
@@ -77,6 +81,40 @@ class SdkPayment
 			'exter_invoke_ip' => $this->exter_invoke_ip,
 			'_input_charset' => strtolower($this->_input_charset),
 			'qr_pay_mode' => $this->qr_pay_mode
+		);
+
+		$para = $this->buildRequestPara($parameter);
+
+		return $this->__gateway_new . $this->createLinkstringUrlencode($para);
+	}
+
+	/**
+	 * 取得网银支付链接
+	 */
+	public function getBankPayLink()
+	{
+		$parameter = array(
+			'service' => $this->service,
+			'partner' => $this->partner,
+			'payment_type' => $this->payment_type,
+			'notify_url' => $this->notify_url,
+			'return_url' => $this->return_url,
+			'seller_email' => $this->seller_id,
+			'out_trade_no' => $this->out_trade_no,
+			'subject' => $this->subject,
+			'total_fee' => $this->total_fee,
+			'body' => $this->body,
+			'it_b_pay' => $this->it_b_pay,
+			'show_url' => $this->show_url,
+			'anti_phishing_key' => $this->anti_phishing_key,
+			'exter_invoke_ip' => $this->exter_invoke_ip,
+			'_input_charset' => strtolower($this->_input_charset),
+			'qr_pay_mode' => $this->qr_pay_mode,
+
+			// 网银支付额外配置
+			'paymethod' => $this->paymethod,
+			'defaultbank' => $this->defaultbank
+
 		);
 
 		$para = $this->buildRequestPara($parameter);
@@ -113,6 +151,18 @@ class SdkPayment
 		} else {
 			return false;
 		}
+	}
+
+	public function setPayMethod($paymethod)
+	{
+		$this->paymethod = $paymethod;
+		return $this;
+	}
+
+	public function setDefaultBank($bank)
+	{
+		$this->defaultbank = $bank;
+		return $this;
 	}
 
 	public function setPartner($partner)

@@ -5,6 +5,11 @@ Alipay
 
 该拓展包想要达到在Laravel5框架下，便捷使用支付宝的目的。
 
+##说明
+- 来源于https://github.com/Latrell/Alipay工程
+- 增加Lumen的服务提供者
+- 增加网银支付接口
+
 ## 安装
 
 ```
@@ -32,11 +37,20 @@ composer require latrell/alipay dev-master
 
 配置文件 `config/latrell-alipay.php` 为公共配置信息文件， `config/latrell-alipay-web.php` 为Web版支付宝SDK配置， `config/latrell-alipay-mobile.php` 为手机端支付宝SDK配置。
 
+####Lumen注册alipay服务
+
+Lumen使用AlipayLumenServiceProvider，修改bootstrap/app.php如下
+```php
+$app->register(Latrell\Alipay\AlipayLumenServiceProvider::class);               //alipay
+$app->configure('latrell-alipay');      //config file
+$app->configure('latrell-alipay-web');      //config file
+$app->configure('latrell-alipay-mobile');      //config file
+```
 ## 例子
 
 ### 支付申请
 
-#### 网页
+#### 网页即时到帐支付方式
 
 ```php
 	// 创建支付单。
@@ -50,6 +64,22 @@ composer require latrell/alipay dev-master
 
 	// 跳转到支付页面。
 	return redirect()->to($alipay->getPayLink());
+```
+
+#### 网页即时到帐支付方式
+
+```php
+	// 创建支付单。
+	$alipay = app('alipay.web');
+	$alipay->setOutTradeNo('order_id');
+	$alipay->setTotalFee('order_price');
+	$alipay->setSubject('goods_name');
+	$alipay->setBody('goods_description');
+	
+	$alipay->setDefaultBank('ABCBTB');  //农行简码
+
+	// 跳转到支付页面。
+	return redirect()->to($alipay->getBankPayLink());
 ```
 
 #### 手机端
